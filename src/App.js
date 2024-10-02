@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import GlobalStyles from "./components/GlobalStyles";
+import { Outlet } from "react-router-dom";
+import { ThemeProvider } from "@emotion/react";
+import useDarkMode from "./customHooks/useDarkMode";
+import { theme } from "./themes/theme";
+import { Link } from "react-router-dom";
+
+console.log("lighttheme: ", theme.light);
+console.log("darktheme: ", theme.dark);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [darkmode, handleToggle, resetTheme] = useDarkMode();
+
+	return (
+		<ThemeProvider theme={darkmode ? theme.dark : theme.light}>
+			<GlobalStyles />
+			<header>
+				<button onClick={handleToggle}>Toggle dark mode</button>
+				<button onClick={resetTheme}>use browser color theme</button>
+			</header>
+			<nav>
+				<Link to="/">Hjem</Link>
+				<Link to="/people">People</Link>
+			</nav>
+			<main>
+				<Outlet />
+			</main>
+			<footer></footer>
+		</ThemeProvider>
+	);
 }
 
 export default App;
